@@ -13,16 +13,20 @@
   <link href="{{asset('assets/css/nucleo-icons.css')}}" rel="stylesheet" />
   <link href="{{asset('assets/css/nucleo-svg.css')}}" rel="stylesheet" />
   <!-- Font Awesome Icons -->
-  <script src="https://kit.fontawesome.com/42d5adcbca.js')}}" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <script src="{{asset('assets/js/jquery/jquery-3.7.1.min.js')}}"></script>
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
   <link id="pagestyle" href="{{asset('assets/css/material-kit.css')}}?v=3.0.0')}}" rel="stylesheet" />
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <style>
     .navbar-brand{
       font-size: 1.875rem !important;
     }
   </style>
+  @yield('styles')
 </head>
 
 <body class="sign-in-basic">
@@ -49,6 +53,7 @@
   <!--  Google Maps Plugin    -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
   <script src="{{asset('assets/js/material-kit.min.js?v=3.0.0')}}" type="text/javascript"></script>
+  @yield('scripts')
 </body>
 
 </html>

@@ -3,23 +3,26 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Http\Requests\User\RegisterRequest;
+use App\Library\Objects\UserObject;
+use App\Library\Repository\Interfaces\UserRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+    public function __construct(
+        private readonly UserRepositoryInterface $userRepository
+    ){}
+
     /**
      * Display the registration view.
      */
     public function create(): View
     {
-        // return view('auth.register');
         return view('auth.sign-up');
     }
 
@@ -28,24 +31,33 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterRequest $request): RedirectResponse|JsonResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $userData = (new UserObject())->setName($request->get('name'))
+                                ->setEmail($request->get('email'))
+                                ->setPassword($request->get('password'))
+                                ->setPhone($request->get('phone'))
+                                ->setIdentity($request->get('identity'))
+                                ->setTaxIdentityNo($request->get('tax_identity_no'))
+                                ->setTaxNo($request->get('tax_no'))
+                                ->setTradeRegistry($request->get('trade_registry'))
+                                ->setAddress($request->get('address'))
+                                ->setCompanyName($request->get('company_name'))
+                                ->setUserType($request->get('user_type'));
+
+        $user = $this->userRepository->register($userData);
 
         event(new Registered($user));
 
         Auth::login($user);
 
+        if (request()->ajax()) {
+            return response()->json([
+                'redirect_url' => route('dashboard'),
+            ]);
+        }
+        
         return redirect(route('dashboard', absolute: false));
     }
 }
