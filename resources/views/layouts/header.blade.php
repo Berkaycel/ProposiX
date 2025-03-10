@@ -5,9 +5,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-7 text-center mx-auto">
-                    <h1 class="text-white pt-3 mt-n5">Material Kit 2</h1>
-                    <p class="lead text-white mt-3">Free & Open Source Web UI Kit built over Bootstrap 5. <br />
-                        Join over 1.6 million developers around the world. </p>
+                    <h1 class="text-white pt-3 mt-n5">ProposiX</h1>
+                    <p class="lead text-white mt-3">ProposiX ile fırsatları yakalayın! En iyi teklifleri verin, kazançlı çıkın. </p>
                 </div>
             </div>
         </div>
