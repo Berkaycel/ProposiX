@@ -7,9 +7,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="{{route('product.index')}}">
               <i class="icon-grid bi bi-box-seam"></i>
-              <span class="menu-title" style="margin-left: 12%;">Ürünler</span>
+              <span class="menu-title" style="margin-left: 12%;">Ürünlerim</span>
             </a>
           </li>
           <li class="nav-item">

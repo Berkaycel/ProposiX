@@ -45,6 +45,7 @@
   <script src="{{asset('assets/dashboard/js/todolist.js')}}"></script>
   <script src="{{asset('assets/dashboard/js/dashboard.js')}}"></script>
   <script src="{{asset('assets/dashboard/js/Chart.roundedBarCharts.js')}}"></script>
+  @yield('scripts')
 </body>
 
 </html>
