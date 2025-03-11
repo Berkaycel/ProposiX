@@ -1,5 +1,7 @@
 @extends('auth.master')
-
+@section('head')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('content')
     <div class="container my-auto">
         <div class="row">

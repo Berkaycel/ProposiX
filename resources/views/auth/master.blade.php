@@ -19,14 +19,14 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
   <link id="pagestyle" href="{{asset('assets/css/material-kit.css')}}?v=3.0.0')}}" rel="stylesheet" />
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+  
 
   <style>
     .navbar-brand{
       font-size: 1.875rem !important;
     }
   </style>
-  @yield('styles')
+  @yield('head')
 </head>
 
 <body class="sign-in-basic">
