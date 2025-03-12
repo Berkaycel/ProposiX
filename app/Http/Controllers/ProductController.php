@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Products\CreateRequest;
 use App\Http\Requests\Products\UpdateRequest;
 use App\Library\Objects\Interfaces\ProductObjectInterface;
 use App\Library\Repository\Interfaces\ProductRepositoryInterface;
+use App\Library\Services\Interfaces\ProductServiceInterface;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
@@ -13,7 +16,8 @@ class ProductController extends Controller
 {
     public function __construct(
         private readonly ProductObjectInterface $productObject,
-        private readonly ProductRepositoryInterface $productRepository
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly ProductServiceInterface $productService
     ) {}
 
     /**
@@ -25,7 +29,7 @@ class ProductController extends Controller
             $products = $this->productRepository->getAll();
             return view('dashboard.product.index', compact('products'));
         } catch (\Throwable $th) {
-            Log::error("Error occurred while fetching products: ".$th->getMessage());
+            Log::error("Error occurred while fetching products: " . $th->getMessage());
             flash()->error('Ürünler sayfasının listelemesinde bir sorun oluştu!');
             return redirect()->back();
         }
@@ -39,7 +43,7 @@ class ProductController extends Controller
         try {
             return view('dashboard.product.create');
         } catch (\Throwable $th) {
-            Log::error("Error occurred while loading product creation page: ".$th->getMessage());
+            Log::error("Error occurred while loading product creation page: " . $th->getMessage());
             flash()->error('Ürün oluşturma sayfası yüklenirken bir hata oluştu!');
             return redirect()->back();
         }
@@ -57,7 +61,7 @@ class ProductController extends Controller
             flash()->success('Ürün başarıyla eklendi!');
             return redirect()->route('product.index');
         } catch (\Throwable $th) {
-            Log::error("Error occurred during product creation: ".$th->getMessage());
+            Log::error("Error occurred during product creation: " . $th->getMessage());
             flash()->error('Ürün ekleme sırasında bir hata oluştu!');
             return redirect()->back()->withErrors($th->getMessage());
         }
@@ -77,7 +81,7 @@ class ProductController extends Controller
 
             return view('dashboard.product.edit', compact('product'));
         } catch (\Throwable $th) {
-            Log::error("Error occurred while loading product edit page: ".$th->getMessage());
+            Log::error("Error occurred while loading product edit page: " . $th->getMessage());
             flash()->error('Ürün düzenleme sayfası yüklenirken bir hata oluştu!');
             return redirect()->back();
         }
@@ -95,7 +99,7 @@ class ProductController extends Controller
             flash()->success('Ürün başarıyla güncellendi!');
             return redirect()->route('product.index');
         } catch (\Throwable $th) {
-            Log::error("Error occurred during product update: ".$th->getMessage());
+            Log::error("Error occurred during product update: " . $th->getMessage());
             flash()->error('Ürün güncellenirken bir hata oluştu!');
             return redirect()->back()->withErrors($th->getMessage());
         }
@@ -112,9 +116,42 @@ class ProductController extends Controller
             flash()->success('Ürün kaydı başarıyla silindi!');
             return redirect()->route('product.index');
         } catch (\Throwable $th) {
-            Log::error("Error occurred during product deletion: ".$th->getMessage());
+            Log::error("Error occurred during product deletion: " . $th->getMessage());
             flash()->error('Ürün silme işleminde bir sorun oluştu!');
             return redirect()->back();
+        }
+    }
+
+    /**
+     * Returns home page products.
+     */
+    public function getOtherProducts(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'page' => 'nullable|integer|min:1',
+                'limit' => 'nullable|integer|min:1|max:100', 
+            ]);
+
+            $page = $validated['page'] ?? 1;
+            $limit = $validated['limit'] ?? 10;
+
+            $products = $this->productService->getHomeProducts($page, $limit);
+
+            return response()->json([
+                'data' => $products->items(), 
+                'pagination' => [
+                    'total' => $products->total(),
+                    'current_page' => $products->currentPage(),
+                    'per_page' => $products->perPage(),
+                    'last_page' => $products->lastPage(),
+                ],
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Bir hata oluştu. Lütfen tekrar deneyin.',
+                'error' => $th->getMessage(),
+            ], 500);
         }
     }
 }
