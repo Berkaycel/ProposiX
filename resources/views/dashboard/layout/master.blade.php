@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="{{asset('assets/dashboard/css/vertical-layout-light/style.css')}}">
   <link rel="shortcut icon" href="{{asset('assets/dashboard/images/favicon.png')}}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-
+  @yield('style')
 </head>
 <body>
   <div class="container-scroller">

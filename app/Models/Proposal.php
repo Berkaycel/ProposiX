@@ -11,7 +11,7 @@ class Proposal extends Model
     use HasFactory;
 
     protected $fillable = [
-        'sender_id', 'receiver_id', 'total', 'status'
+        'sender_id', 'receiver_id', 'total', 'status', 'offered_amount', 'last_valid_date'
     ];
 
     protected $casts = [

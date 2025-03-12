@@ -23,10 +23,10 @@ class ProductService implements ProductServiceInterface
     public function getTopOfferedProducts(): Collection
     {
         return DB::table('proposal_items')
-            ->select('product_id', DB::raw('COUNT(*) as proposal_count'))
+            ->select('products.*', DB::raw('COUNT(*) as proposal_count'))
             ->join('products', 'proposal_items.product_id', '=', 'products.id')
-            ->where('products.user_id', '<>', Auth::id()) 
-            ->groupBy('product_id')
+            ->where('products.user_id', '<>', Auth::id())
+            ->groupBy('product_id', 'products.id')
             ->orderByDesc('proposal_count')
             ->limit(5)
             ->get();
@@ -36,12 +36,13 @@ class ProductService implements ProductServiceInterface
     {
         return DB::table('proposal_items')
             ->join('proposals', 'proposal_items.proposal_id', '=', 'proposals.id')
-            ->select('proposal_items.product_id', DB::raw('COUNT(*) as accepted_count'))
+            ->join('products', 'proposal_items.product_id', '=', 'products.id') 
+            ->select('products.*', DB::raw('COUNT(*) as accepted_count'))
             ->where('proposals.status', 'ACTIVE')
             ->where('proposals.receiver_id', '<>', Auth::id())
-            ->groupBy('proposal_items.product_id')
+            ->groupBy('proposal_items.product_id', 'products.id')
             ->orderByDesc('accepted_count')
-            ->limit(5) 
+            ->limit(5)
             ->get();
     }
 

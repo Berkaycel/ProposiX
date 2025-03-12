@@ -26,10 +26,10 @@
                                             <p class="mb-0"><strong>Birim Fiyatı:</strong> {{ $product->unit_price }} TL
                                             </p>
                                             <div class="template-demo mt-2">
-                                                <button type="button" class="btn btn-success btn-icon-text">
+                                                <a href="{{route('proposals.outbound.create', ['productId' => $product->id])}}" class="btn btn-success btn-icon-text">
                                                     <i class="ti-file btn-icon-prepend"></i>
                                                     Teklif Ver
-                                                </button>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -61,10 +61,10 @@
                                             <p class="mb-0"><strong>Birim Fiyatı:</strong> {{ $product->unit_price }} TL
                                             </p>
                                             <div class="template-demo mt-2">
-                                                <button type="button" class="btn btn-success btn-icon-text">
+                                                <a href="{{route('proposals.outbound.create', ['productId' => $product->id])}}" class="btn btn-success btn-icon-text">
                                                     <i class="ti-file btn-icon-prepend"></i>
                                                     Teklif Ver
-                                                </button>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -96,10 +96,10 @@
                                             <p class="mb-0"><strong>Birim Fiyatı:</strong> {{ $product->unit_price }} TL
                                             </p>
                                             <div class="template-demo mt-2">
-                                                <button type="button" class="btn btn-success btn-icon-text">
+                                                <a href="{{route('proposals.outbound.create', ['productId' => $product->id])}}" class="btn btn-success btn-icon-text">
                                                     <i class="ti-file btn-icon-prepend"></i>
                                                     Teklif Ver
-                                                </button>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -156,7 +156,7 @@
                     url: '{{ route('product.getOtherProducts') }}',
                     method: 'GET',
                     data: function(d) {
-                        d.page = d.start / d.length + 1; 
+                        d.page = d.start / d.length + 1;
                         d.limit = d.length;
                     },
                     dataSrc: function(json) {
@@ -179,7 +179,10 @@
                     {
                         data: null,
                         render: function(data, type, row) {
-                            return `<button class="btn btn-primary offer-button" data-id="${row.id}">Teklif Ver</button>`;
+                            var routeUrl =
+                                `{{ route('proposals.outbound.create', ['productId' => ':id']) }}`
+                                .replace(':id', data.id);
+                            return `<a href="${routeUrl}" class="btn btn-success offer-button" data-id="${row.id}">Teklif Ver</a>`;
                         }
                     }
                 ],
@@ -198,18 +201,13 @@
                         "sLast": "Son"
                     }
                 },
-                responsive: true, 
+                responsive: true,
                 paging: true,
                 pageLength: 5,
-                autoWidth: false, 
+                autoWidth: false,
                 order: [
                     [0, 'desc']
-                ], 
-            });
-
-            $('#productTable').on('click', '.offer-button', function() {
-                var productId = $(this).data('id');
-                alert('Teklif vermek için ürün ID: ' + productId);
+                ],
             });
         });
     </script>

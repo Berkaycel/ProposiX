@@ -23,19 +23,28 @@
                         <ul class="navbar-nav navbar-nav-hover ms-auto">
 
                             <li class="nav-item ms-lg-auto">
-                                <a class="nav-link nav-link-icon me-2"
-                                    href="{{ route('login') }}">
-                                    <i class="fa fa-github me-1"></i>
-                                    <p class="d-inline text-sm z-index-1 font-weight-bold"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                        title="Portal Giriş">Giriş Yap</p>
-                                </a>
-                            </li>
-                            <li class="nav-item my-auto ms-3 ms-lg-0">
-
-                                <a href="{{route('register')}}"
-                                    class="btn btn-sm  bg-gradient-primary  mb-0 me-1 mt-2 mt-md-0">Kaydol</a>
-
+                                @auth
+                                    <a class="nav-link nav-link-icon me-2" href="{{ route('logout') }}" 
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fa fa-sign-out me-1"></i>
+                                        <p class="d-inline text-sm z-index-1 font-weight-bold"
+                                           data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                           title="Çıkış Yap">Çıkış Yap</p>
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                @else
+                                    <a class="nav-link nav-link-icon me-2" href="{{ route('login') }}">
+                                        <i class="fa fa-github me-1"></i>
+                                        <p class="d-inline text-sm z-index-1 font-weight-bold"
+                                           data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                           title="Portal Giriş">Giriş Yap</p>
+                                    </a>
+                                    <li class="nav-item my-auto ms-3 ms-lg-0">
+                                        <a href="{{ route('register') }}" class="btn btn-sm bg-gradient-primary mb-0 me-1 mt-2 mt-md-0">Kaydol</a>
+                                    </li>
+                                @endauth
                             </li>
                         </ul>
                     </div>
